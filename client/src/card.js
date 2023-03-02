@@ -5,7 +5,7 @@ import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import axios from "axios"
 
-export default function OutlinedCard({ text, striked, id, fun }) {  
+export default function OutlinedCard({ text, striked, id, fun, setEditId }) {  
     const checkBoxHandler = async () => {
         striked=!striked;
         await axios.post(`http://localhost:5000/updateTodo/${id}`, {
@@ -22,6 +22,7 @@ export default function OutlinedCard({ text, striked, id, fun }) {
           </Typography>
           <Typography variant="h5" component="div" style={{ textDecoration: striked ? "line-through" : "" }}>
             {text}
+            <button onClick={()=> setEditId(id)}>Edit</button>
           </Typography>
         </CardContent>
       </Card>

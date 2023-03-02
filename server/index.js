@@ -65,7 +65,7 @@ app.use("/updateTodo/:id", async (req, res) => {
     date,
     striked,
     text
-  })
+  }, {new: true})
   res.json({data})
 })
 
