@@ -4,9 +4,29 @@ const cors=require("cors");
 const mongoose=require("mongoose");
 const app=express();
 app.use(cors());
+app.use(express.json())
 
-app.use("/", (req, res) => {
-    res.send("Hello")
+const Todos = require("./TodoModel")
+
+app.use("/postTodo", async (req, res) => {
+  const { text, date } = req.body;
+  await Todos.create({
+    text,
+    date
+  })
+  console.log(text)
+  let data = await Todos.find({})
+  res.json({ data: data })
+})
+
+app.use("/getTodo", async (req, res) => {
+  const month=req.query.month;
+  let data = await Todos.find({})
+  data = data.filter((ele) => {
+    return ele.date.getMonth()+1==month
+  })
+  // console.log(tmpData)
+  res.json({ data: data });
 })
 
 mongoose
