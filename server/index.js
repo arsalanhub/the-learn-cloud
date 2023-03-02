@@ -1,43 +1,61 @@
 require("dotenv").config();
-const express=require("express");
-const cors=require("cors");
-const mongoose=require("mongoose");
-const app=express();
+const express = require("express");
+const cors = require("cors");
+const mongoose = require("mongoose");
+const app = express();
 app.use(cors());
-app.use(express.json())
+app.use(express.json());
 
-const Todos = require("./TodoModel")
+const Todos = require("./TodoModel");
 
 app.use("/postTodo", async (req, res) => {
   const { text, date, striked } = req.body;
   await Todos.create({
     text,
     date,
-    striked
-  })
-  let data = await Todos.find({})
-  res.json({ data: data })
-})
+    striked,
+  });
+  let data = await Todos.find({});
+  res.json({ data: data });
+});
 
 app.use("/getTodo", async (req, res) => {
-  const month=req.query.month;
-  const year=req.query.year;
-  let data = await Todos.find({})
-  if(month && year) {
+  const month = req.query.month;
+  const year = req.query.year;
+  let data = await Todos.find({});
+  if (month && year) {
     data = data.filter((ele) => {
-      if(ele.date.getMonth()+1==month && ele.date.getFullYear()==year) return true;
-    })
-  } else if(month) {
+      if (ele.date.getMonth() + 1 == month && ele.date.getFullYear() == year)
+        return true;
+    });
+  } else if (month) {
     data = data.filter((ele) => {
-      if(ele.date.getMonth()+1==month) return true;
-    })
-  } else if(year) {
+      if (ele.date.getMonth() + 1 == month) return true;
+    });
+  } else if (year) {
     data = data.filter((ele) => {
-      if(ele.date.getFullYear()==year) return true;
-    })
+      if (ele.date.getFullYear() == year) return true;
+    });
   }
   res.json({ data: data });
-})
+});
+
+app.use("/getYear", async (req, res) => {
+  let data = await Todos.aggregate([
+    {
+      $project: {
+        year: { $year: "$date" },
+      },
+    },
+    {
+      $group: {
+        _id: null,
+        distinctYear: { $addToSet: "$year" },
+      },
+    },
+  ]);
+  res.json({ data });
+});
 
 mongoose
   .connect(process.env.DB_URL, {
@@ -52,5 +70,5 @@ mongoose
   });
 
 app.listen(5000, (req, res) => {
-    console.log("connected to 5000")
-})
+  console.log("connected to 5000");
+});
