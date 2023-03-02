@@ -69,6 +69,12 @@ app.use("/updateTodo/:id", async (req, res) => {
   res.json({data})
 })
 
+app.use("/deleteTodo/:id", async (req, res) => {
+  let id = req.params['id'];
+  await Todos.findByIdAndDelete(id);
+  res.json({ msg: "Deleted" })
+})
+
 mongoose
   .connect(process.env.DB_URL, {
     useNewUrlParser: true,

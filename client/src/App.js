@@ -12,6 +12,7 @@ function App() {
   const [queryYear, setQueryYear] = useState("");
   const [queryMonth, setQueryMonth] = useState("");
   const [editId, setEditId] = useState(0);
+  const [deleteId, setDeleteId] = useState(0);
 
   const fun = async () => {
     let tmpData = await axios.get(
@@ -51,6 +52,17 @@ function App() {
     fun();
   }, []);
 
+  useEffect(() => {
+    if(deleteId !== 0) {
+      setDeleteId(0);
+      const deleteFun = async () => {
+        await axios.post(`http://localhost:5000/deleteTodo/${deleteId}`)
+      }
+      deleteFun()
+      fun()
+    }
+  }, [deleteId])
+
   return (
     <>
       <input type="text" onChange={(e) => setText(e.target.value)} />
@@ -81,6 +93,7 @@ function App() {
               key={ele._id}
               id={ele._id}
               setEditId={setEditId}
+              setDeleteId={setDeleteId}
             />
           );
         })}
