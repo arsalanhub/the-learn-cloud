@@ -49,7 +49,7 @@ function App() {
         })}
       </select>
       {data && data.map((ele) => {
-        return(<OutlinedCard text={ele.text} striked={ele.striked} key={ele._id}/> )
+        return(<OutlinedCard text={ele.text} striked={ele.striked} key={ele._id} fun={fun} id={ele._id} /> )
       })}
     </>
   );

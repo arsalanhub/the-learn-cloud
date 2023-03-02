@@ -57,6 +57,18 @@ app.use("/getYear", async (req, res) => {
   res.json({ data });
 });
 
+app.use("/updateTodo/:id", async (req, res) => {
+  let id = req.params['id']
+  const { date, striked, text } = req.body;
+  console.log(date, striked, text);
+  let data = await Todos.findByIdAndUpdate(id, {
+    date,
+    striked,
+    text
+  })
+  res.json({data})
+})
+
 mongoose
   .connect(process.env.DB_URL, {
     useNewUrlParser: true,
