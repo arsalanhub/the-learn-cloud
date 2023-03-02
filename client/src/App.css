@@ -5,3 +5,13 @@
   border: 1px solid rgba(0, 0, 0, 0.12);
   min-width: 275px;
 }
+
+.css-12dv9jb {
+  width: 90% !important;
+  display: flex !important;
+  justify-content: center !important;
+}
+
+.css-1v5z4dq-MuiPaper-root-MuiCard-root {
+  width: 30rem;
+}

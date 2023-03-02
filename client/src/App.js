@@ -87,14 +87,15 @@ function App() {
               </div>
             );
           return (
-            <OutlinedCard
+              <OutlinedCard
               text={ele.text}
               striked={ele.striked}
               key={ele._id}
               id={ele._id}
               setEditId={setEditId}
               setDeleteId={setDeleteId}
-            />
+              date={ele.date}
+              />
           );
         })}
     </>
