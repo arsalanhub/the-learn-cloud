@@ -21,11 +21,21 @@ app.use("/postTodo", async (req, res) => {
 
 app.use("/getTodo", async (req, res) => {
   const month=req.query.month;
+  const year=req.query.year;
   let data = await Todos.find({})
-  data = data.filter((ele) => {
-    return ele.date.getMonth()+1==month
-  })
-  // console.log(tmpData)
+  if(month && year) {
+    data = data.filter((ele) => {
+      if(ele.date.getMonth()+1==month && ele.date.getFullYear()==year) return true;
+    })
+  } else if(month) {
+    data = data.filter((ele) => {
+      if(ele.date.getMonth()+1==month) return true;
+    })
+  } else if(year) {
+    data = data.filter((ele) => {
+      if(ele.date.getFullYear()==year) return true;
+    })
+  }
   res.json({ data: data });
 })
 
