@@ -1,28 +1,40 @@
-import logo from "./logo.svg";
 import "./App.css";
-import TextField from '@mui/material/TextField';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { useState } from "react";
+import axios from "axios"
+import react, { useEffect, useState } from "react"
+import OutlinedCard from "./card";
 
 function App() {
-  const [value, setValue] = useState(null)
+  const [text, setText] = useState("")
+  const [date, setDate] = useState("")
+  const [striked, setStriked] = useState(false)
+  const [data, setData] = useState([])
+
+  const fun = async () => {
+    let tmpData = await axios.get("http://localhost:5000/getTodo");
+    setData(tmpData.data.data);
+  }
+
+  const clickHander = async () => {
+    await axios.post("http://localhost:5000/postTodo", {
+      text,
+      date,
+      striked
+    })
+    fun()
+  }
+
+  useEffect(() => {
+    fun()
+  }, [])
   return (
     <>
-      <input type="text" />
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <DatePicker
-          label="Basic example"
-          value={value}
-          onChange={(newValue) => {
-            setValue(newValue);
-            console.log(newValue)
-          }}
-          renderInput={(params) => <TextField {...params} />}
-        />
-      </LocalizationProvider>
-      <input type="date" onChange={(e) => console.log(e.target.value)}/>
+      <input type="text" onChange={(e)=>setText(e.target.value)} />
+      <input type="date" onChange={(e)=>setDate(e.target.value)}/>
+      <button onClick={()=>clickHander()}>Submit</button>
+
+      {data && data.map((ele) => {
+        return(<OutlinedCard text={ele.text} striked={ele.striked}/> )
+      })}
     </>
   );
 }

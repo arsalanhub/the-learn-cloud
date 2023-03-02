@@ -6,6 +6,9 @@ const todoSchema = new mongoose.Schema({
     },
     date: {
         type: Date
+    },
+    striked: {
+        type: Boolean
     }
 })
 

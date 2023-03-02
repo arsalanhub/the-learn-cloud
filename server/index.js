@@ -9,12 +9,12 @@ app.use(express.json())
 const Todos = require("./TodoModel")
 
 app.use("/postTodo", async (req, res) => {
-  const { text, date } = req.body;
+  const { text, date, striked } = req.body;
   await Todos.create({
     text,
-    date
+    date,
+    striked
   })
-  console.log(text)
   let data = await Todos.find({})
   res.json({ data: data })
 })
