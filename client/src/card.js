@@ -21,7 +21,7 @@ export default function OutlinedCard({ text, striked, id, setEditId, setDeleteId
             <input type="checkbox" checked={striked} onClick={() => checkBoxHandler()}/>
           </Typography>
           <Typography variant="h5" component="div" style={{ textDecoration: striked ? "line-through" : "", display: "flex", width: "100%", justifyContent: "space-between" }}>
-            <div>{text}</div>
+            <div style={{width: "53%"}}>{text}</div>
             <Chip label={date.split('T')[0]} />
             <div>
                <button onClick={()=> setEditId(id)}>Edit</button>

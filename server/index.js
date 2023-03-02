@@ -57,6 +57,23 @@ app.use("/getYear", async (req, res) => {
   res.json({ data });
 });
 
+app.use("/getMonth", async (req, res) => {
+  let data = await Todos.aggregate([
+    {
+      $project: {
+        month: { $month: "$date" },
+      },
+    },
+    {
+      $group: {
+        _id: null,
+        distinctMonth: { $addToSet: "$month" },
+      },
+    },
+  ]);
+  res.json({ data });
+})
+
 app.use("/updateTodo/:id", async (req, res) => {
   let id = req.params['id']
   const { date, striked, text } = req.body;

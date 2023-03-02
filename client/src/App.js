@@ -9,6 +9,7 @@ function App() {
   const [striked, setStriked] = useState(false);
   const [data, setData] = useState([]);
   const [year, setYear] = useState([]);
+  const [month, setMonth] = useState([]);
   const [queryYear, setQueryYear] = useState("");
   const [queryMonth, setQueryMonth] = useState("");
   const [editId, setEditId] = useState(0);
@@ -19,9 +20,26 @@ function App() {
       `http://localhost:5000/getTodo?month=${queryMonth}&year=${queryYear}`
     );
     let tmpYear = await axios.get("http://localhost:5000/getYear");
+    let tmpMonth = await axios.get("http://localhost:5000/getMonth");
     setData(tmpData.data.data);
     setYear(tmpYear.data.data[0].distinctYear);
+    setMonth(tmpMonth.data.data[0].distinctMonth);
   };
+
+  const resetOptions = async () => {
+    let tmpData = await axios.get(
+      "http://localhost:5000/getTodo?month=&year="
+    );
+    setYear([])
+    setMonth([])
+    setQueryMonth("")
+    setQueryYear("")
+    let tmpYear = await axios.get("http://localhost:5000/getYear");
+    let tmpMonth = await axios.get("http://localhost:5000/getMonth");
+    setData(tmpData.data.data);
+    setYear(tmpYear.data.data[0].distinctYear);
+    setMonth(tmpMonth.data.data[0].distinctMonth);
+  }
 
   const clickHander = async () => {
     await axios.post("http://localhost:5000/postTodo", {
@@ -39,6 +57,14 @@ function App() {
     );
     setData(tmpData.data.data);
   };
+
+  const monthHandler = async (month) => {
+    setQueryMonth(month);
+    let tmpData = await axios.get(
+      `http://localhost:5000/getTodo?month=${month}&year=${queryYear}`
+    );
+    setData(tmpData.data.data);
+  }
 
   const updateHandler = async (id) => {
     let data = await axios.post(`http://localhost:5000/updateTodo/${id}`, {
@@ -69,7 +95,7 @@ function App() {
       <input type="date" onChange={(e) => setDate(e.target.value)} />
       <button onClick={() => clickHander()}>Submit</button>
       <select onChange={(e) => yearHandler(e.target.value)}>
-        <option value="Select Year" selected disabled={true}>
+        <option value="Select Year" selected>
           Select Year
         </option>
         {year &&
@@ -77,6 +103,16 @@ function App() {
             return <option key={idx}>{ele}</option>;
           })}
       </select>
+      <select onChange={(e) => monthHandler(e.target.value)}>
+        <option value="Select Month" selected>
+          Select Month
+        </option>
+        {month &&
+          month.map((ele, idx) => {
+            return (<option key={idx+10}>{ele}</option>)
+          })}
+      </select>
+      <button onClick={()=> resetOptions()}>Clear</button>
       {data &&
         data.map((ele) => {
           if (editId === ele._id)
