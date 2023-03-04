@@ -6,6 +6,7 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import Chip from '@mui/material/Chip';
+import BarChart from "./barChart";
 
 function App() {
   const [text, setText] = useState("");
@@ -121,7 +122,8 @@ function App() {
   }, [deleteId])
 
   return (
-    <>
+    <div style={{ display: "flex", marginTop: "3rem", marginRight: "1rem" }}>
+      <div style={{ width: "45%" }}>
       <Box sx={{ minWidth: 275 }} className="card-wrapper">
           <Card variant="outlined">
             <CardContent style={{ display: "flex", padding: "1rem" }}>
@@ -195,7 +197,11 @@ function App() {
             </CardContent>
           </Card>
         </Box>
-    </>
+      </div>
+      <div style={{ width: "55%" }}>
+        {data && <BarChart chartData={data} />}
+      </div>
+    </div>
   );
 }
 
