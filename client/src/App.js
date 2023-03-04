@@ -80,11 +80,20 @@ function App() {
     fun()
   }
 
-  const DragHandler = () => {
+  const DragHandler = async () => {
     let tmp=data[itemToBeDragged]
     data[itemToBeDragged]=data[itemOnWhichDrag]
     data[itemOnWhichDrag]=tmp;
-    setData([...data])
+    console.log(itemOnWhichDrag, itemToBeDragged)
+    await axios.post(`http://localhost:5000/updateTodo/${data[itemToBeDragged]._id}`, {
+      index: itemToBeDragged
+    })
+    await axios.post(`http://localhost:5000/updateTodo/${data[itemOnWhichDrag]._id}`, {
+      index: itemOnWhichDrag
+    })
+    setItemOnWhichDrag(-1);
+    setItemToBeDragged(-1);
+    fun()
   }
 
   const checkBoxHandler = async (id, striked) => {

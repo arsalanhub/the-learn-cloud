@@ -10,10 +10,12 @@ const Todos = require("./TodoModel");
 
 app.use("/postTodo", async (req, res) => {
   const { text, date, striked } = req.body;
+  const index = await Todos.find({}).count();
   await Todos.create({
     text,
     date,
     striked,
+    index
   });
   let data = await Todos.find({});
   res.json({ data: data });
@@ -22,7 +24,7 @@ app.use("/postTodo", async (req, res) => {
 app.use("/getTodo", async (req, res) => {
   const month = req.query.month;
   const year = req.query.year;
-  let data = await Todos.find({});
+  let data = await Todos.find({}).sort({ "index": 1 });
   if (month && year) {
     data = data.filter((ele) => {
       if (ele.date.getMonth() + 1 == month && ele.date.getFullYear() == year)
@@ -76,12 +78,13 @@ app.use("/getMonth", async (req, res) => {
 
 app.use("/updateTodo/:id", async (req, res) => {
   let id = req.params['id']
-  const { date, striked, text } = req.body;
-  console.log(date, striked, text);
+  const { date, striked, text, index } = req.body;
+  console.log(index)
   let data = await Todos.findByIdAndUpdate(id, {
     date,
     striked,
-    text
+    text,
+    index
   }, {new: true})
   res.json({data})
 })

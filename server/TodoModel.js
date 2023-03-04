@@ -9,6 +9,9 @@ const todoSchema = new mongoose.Schema({
     },
     striked: {
         type: Boolean
+    },
+    index: {
+        type: Number
     }
 })
 
