@@ -96,7 +96,7 @@ app.use("/deleteTodo/:id", async (req, res) => {
 })
 
 mongoose
-  .connect(process.env.DB_URL, {
+  .connect("mongodb+srv://mohdarsalan:1234@cluster0.aqyippk.mongodb.net/?retryWrites=true&w=majority", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   })
