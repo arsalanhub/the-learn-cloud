@@ -238,7 +238,7 @@ function App() {
                 <input
                   type="text"
                   onChange={(e) => setText(e.target.value)}
-                  placeholder="Enter Todo"
+                  placeholder="Enter Budget"
                 />
                 <input type="date" onChange={(e) => setDate(e.target.value)} />
                 <button onClick={() => clickHander()}>Submit</button>
