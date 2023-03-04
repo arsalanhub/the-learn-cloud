@@ -122,28 +122,34 @@ function App() {
 
   return (
     <>
-      <input type="text" onChange={(e) => setText(e.target.value)} />
-      <input type="date" onChange={(e) => setDate(e.target.value)} />
-      <button onClick={() => clickHander()}>Submit</button>
-      <select onChange={(e) => yearHandler(e.target.value)}>
-        <option value="Select Year" selected>
-          Select Year
-        </option>
-        {year &&
-          year.map((ele, idx) => {
-            return <option key={idx}>{ele}</option>;
-          })}
-      </select>
-      <select onChange={(e) => monthHandler(e.target.value)}>
-        <option value="Select Month" selected>
-          Select Month
-        </option>
-        {month &&
-          month.map((ele, idx) => {
-            return (<option key={idx+10}>{ele}</option>)
-          })}
-      </select>
-      <button onClick={()=> resetOptions()}>Clear</button>
+      <Box sx={{ minWidth: 275 }} className="card-wrapper">
+          <Card variant="outlined">
+            <CardContent style={{ display: "flex", padding: "1rem" }}>
+              <Typography variant="h5" component="div" style={{ display: "flex", width: "100%", justifyContent: "space-around"}}>
+                  Filters: 
+                  <select onChange={(e) => yearHandler(e.target.value)}>
+                    <option value="Select Year" selected>
+                      Select Year
+                    </option>
+                    {year &&
+                      year.map((ele, idx) => {
+                        return <option key={idx}>{ele}</option>;
+                      })}
+                  </select>
+                  <select onChange={(e) => monthHandler(e.target.value)}>
+                    <option value="Select Month" selected>
+                      Select Month
+                    </option>
+                    {month &&
+                      month.map((ele, idx) => {
+                        return (<option key={idx+10}>{ele}</option>)
+                      })}
+                  </select>
+                  <button onClick={()=> resetOptions()}>Clear</button>
+              </Typography>
+            </CardContent>
+          </Card>
+        </Box>
       {data &&
         data.map((ele, idx) => {
           if (editId === ele._id)
@@ -178,6 +184,17 @@ function App() {
             </Box>
           );
         })}
+        <Box sx={{ minWidth: 275 }} className="card-wrapper">
+          <Card variant="outlined">
+            <CardContent style={{ display: "flex", padding: "1rem" }}>
+              <Typography variant="h5" component="div" style={{ display: "flex", width: "100%", justifyContent: "space-around"}}>
+                  <input type="text" onChange={(e) => setText(e.target.value)} placeholder="Enter Todo" />
+                  <input type="date" onChange={(e) => setDate(e.target.value)} />
+                  <button onClick={() => clickHander()}>Submit</button>
+              </Typography>
+            </CardContent>
+          </Card>
+        </Box>
     </>
   );
 }
