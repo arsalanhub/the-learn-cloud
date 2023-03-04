@@ -1,7 +1,6 @@
 import "./App.css";
 import axios from "axios";
 import react, { useEffect, useState } from "react";
-import OutlinedCard from "./card";
 import Box from "@mui/material/Box";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
@@ -82,7 +81,10 @@ function App() {
   }
 
   const DragHandler = () => {
-    console.log(itemToBeDragged, itemOnWhichDrag)
+    let tmp=data[itemToBeDragged]
+    data[itemToBeDragged]=data[itemOnWhichDrag]
+    data[itemOnWhichDrag]=tmp;
+    setData([...data])
   }
 
   const checkBoxHandler = async (id, striked) => {
