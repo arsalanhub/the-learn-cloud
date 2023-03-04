@@ -2,6 +2,11 @@ import "./App.css";
 import axios from "axios";
 import react, { useEffect, useState } from "react";
 import OutlinedCard from "./card";
+import Box from "@mui/material/Box";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Typography from "@mui/material/Typography";
+import Chip from '@mui/material/Chip';
 
 function App() {
   const [text, setText] = useState("");
@@ -14,6 +19,8 @@ function App() {
   const [queryMonth, setQueryMonth] = useState("");
   const [editId, setEditId] = useState(0);
   const [deleteId, setDeleteId] = useState(0);
+  const [itemToBeDragged, setItemToBeDragged] = useState(-1);
+  const [itemOnWhichDrag, setItemOnWhichDrag] = useState(-1);
 
   const fun = async () => {
     let tmpData = await axios.get(
@@ -74,16 +81,29 @@ function App() {
     fun()
   }
 
+  const DragHandler = () => {
+    console.log(itemToBeDragged, itemOnWhichDrag)
+  }
+
+  const checkBoxHandler = async (id, striked) => {
+    striked=!striked;
+    await axios.post(`http://localhost:5000/updateTodo/${id}`, {
+        striked
+    })
+    fun()
+  }
+
+  const deleteFun = async () => {
+    await axios.post(`http://localhost:5000/deleteTodo/${deleteId}`)
+    setDeleteId(0);
+  }
+
   useEffect(() => {
     fun();
   }, []);
 
   useEffect(() => {
     if(deleteId !== 0) {
-      setDeleteId(0);
-      const deleteFun = async () => {
-        await axios.post(`http://localhost:5000/deleteTodo/${deleteId}`)
-      }
       deleteFun()
       fun()
     }
@@ -114,7 +134,7 @@ function App() {
       </select>
       <button onClick={()=> resetOptions()}>Clear</button>
       {data &&
-        data.map((ele) => {
+        data.map((ele, idx) => {
           if (editId === ele._id)
             return (
               <div className="editBox">
@@ -123,15 +143,28 @@ function App() {
               </div>
             );
           return (
-              <OutlinedCard
-              text={ele.text}
-              striked={ele.striked}
-              key={ele._id}
-              id={ele._id}
-              setEditId={setEditId}
-              setDeleteId={setDeleteId}
-              date={ele.date}
-              />
+            <Box sx={{ minWidth: 275 }} className="card-wrapper">
+              <Card variant="outlined" draggable={true} 
+                      key={idx}
+                      onDragStart={() => setItemToBeDragged(idx)} 
+                      onDragEnter={() => setItemOnWhichDrag(idx)} 
+                      onDragEnd={() => DragHandler()} 
+                      onDragOver={(e) => e.preventDefault()}>
+                <CardContent style={{ display: "flex"}}>
+                  <Typography variant="h5" component="div">
+                    <input type="checkbox" checked={ele.striked} onClick={() => checkBoxHandler(ele._id, ele.striked)}/>
+                  </Typography>
+                  <Typography variant="h5" component="div" style={{ textDecoration: ele.striked ? "line-through" : "", display: "flex", width: "100%", justifyContent: "space-between" }}>
+                    <div style={{width: "53%"}}>{ele.text}</div>
+                    <Chip label={ele.date.split('T')[0]} />
+                     <div>
+                       <button onClick={()=> setEditId(ele._id)}>Edit</button>
+                       <button onClick={()=> setDeleteId(ele._id)}>Delete</button>
+                     </div>
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Box>
           );
         })}
     </>

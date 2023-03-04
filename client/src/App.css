@@ -15,3 +15,7 @@
 .css-1v5z4dq-MuiPaper-root-MuiCard-root {
   width: 30rem;
 }
+
+.card-wrapper {
+  cursor: pointer;
+}
